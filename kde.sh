@@ -23,7 +23,7 @@ sudo pacman -Syu wine
 # optional dependency for lutris
 sudo pacman -S gamemode innoextract lib32-gamemode lib32-vkd3d python-protobuf vkd3d lib32-vulkan-mesa-layers steam-native-runtime vulkan-mesa-layers 
 
-sudo pacman -Syu xorg xorg-xinit plasma konsole sddm ark kwrite p7zip unrar xz libreoffice-still gst-libav gst-plugin-pipewire gst-plugins-bad gst-plugins-ugly gstreamer-vaapi archlinux-wallpaper firefox vlc papirus-icon-theme mtpfs gvfs-mtp dbeaver docker docker-compose jdk21-openjdk ttf-fira-code go rhythmbox terminus-font powerline-fonts ttf-font-awesome adobe-source-code-pro-fonts ttf-jetbrains-mono noto-fonts noto-fonts-emoji noto-fonts-extra awesome-terminal-fonts
+sudo pacman -Syu xorg xorg-xinit plasma konsole sddm ark kwrite p7zip unrar xz libreoffice-still gst-libav gst-plugin-pipewire gst-plugins-bad gst-plugins-ugly gstreamer-vaapi archlinux-wallpaper firefox vlc vlc-plugin-ffmpeg papirus-icon-theme mtpfs gvfs-mtp dbeaver docker docker-compose jdk21-openjdk ttf-fira-code go rhythmbox terminus-font powerline-fonts ttf-font-awesome adobe-source-code-pro-fonts ttf-jetbrains-mono noto-fonts noto-fonts-emoji noto-fonts-extra awesome-terminal-fonts
 yay -S jmtpfs intellij-idea-ultimate-edition visual-studio-code-bin insomnia-bin ttf-ms-fonts ttf-meslo-nerd-font-powerlevel10k
 
 sudo groupadd docker
