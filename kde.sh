@@ -37,6 +37,26 @@ sudo chmod +x p10k.sh
 
 ./p10k.sh
 
+# Define the profile path
+KONSOLE_PROFILE="$HOME/.local/share/konsole/Shell.profile"
+
+# Ensure the directory exists
+mkdir -p "$HOME/.local/share/konsole"
+
+# Check if the file exists; if not, create a basic one
+if [ ! -f "$KONSOLE_PROFILE" ]; then
+    echo -e "[Appearance]\nFont=MesloLGS NF,12,-1,5,50,0,0,0,0,0" > "$KONSOLE_PROFILE"
+else
+    # If it exists, update the Font line or add it if missing
+    if grep -q "^Font=" "$KONSOLE_PROFILE"; then
+        sed -i "s/^Font=.*/Font=MesloLGS NF,12,-1,5,50,0,0,0,0,0/" "$KONSOLE_PROFILE"
+    else
+        echo "Font=MesloLGS NF,12,-1,5,50,0,0,0,0,0" >> "$KONSOLE_PROFILE"
+    fi
+fi
+
+chsh -s /bin/zsh
+
 sudo groupadd docker
 sudo usermod -aG docker $USER
 
