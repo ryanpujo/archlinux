@@ -20,7 +20,7 @@ echo "ParallelDownloads = 5" >> /etc/pacman.conf
 echo "[multilib]" >> /etc/pacman.conf
 echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 
-pacman -Syu grub grub-btrfs efibootmgr cmake ninja clang networkmanager network-manager-applet dialog wpa_supplicant mtools dosfstools base-devel linux-headers linux-atm avahi xdg-user-dirs xdg-utils gvfs gvfs-smb nfs-utils inetutils dnsutils bluez bluez-utils cups hplip alsa-utils pipewire pipewire-alsa pipewire-pulse pipewire-jack bash-completion openssh rsync reflector acpi acpi_call power-profiles-daemon virt-manager qemu edk2-ovmf bridge-utils dnsmasq vde2 openbsd-netcat iptables-nft ipset firewalld flatpak sof-firmware nss-mdns acpid os-prober ntfs-3g terminus-font
+pacman -Syu grub grub-btrfs efibootmgr cmake ninja clang networkmanager network-manager-applet dialog wpa_supplicant mtools dosfstools base-devel linux-headers linux-atm avahi xdg-user-dirs xdg-utils gvfs gvfs-smb nfs-utils inetutils dnsutils bluez bluez-utils cups hplip alsa-utils pipewire pipewire-alsa pipewire-pulse pipewire-jack bash-completion openssh rsync reflector acpi acpi_call power-profiles-daemon virt-manager qemu edk2-ovmf bridge-utils dnsmasq vde2 openbsd-netcat iptables-nft ipset firewalld flatpak sof-firmware nss-mdns acpid os-prober ntfs-3g terminus-font zsh
 
 # pacman -S --noconfirm xf86-video-amdgpu
 pacman -S --noconfirm nvidia-open nvidia-utils nvidia-settings
