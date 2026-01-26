@@ -6,7 +6,7 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 sudo timedatectl set-ntp true
 sudo hwclock --systohc
 
-sudo reflector -c Taiwan -a 6 --sort rate --save /etc/pacman.d/mirrorlist
+sudo reflector -c "Taiwan, Singapore, Korea" -a 6 --sort rate --save /etc/pacman.d/mirrorlist
 
 sudo firewall-cmd --add-port=1025-65535/tcp --permanent
 sudo firewall-cmd --add-port=1025-65535/udp --permanent
