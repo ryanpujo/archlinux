@@ -8,7 +8,7 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 sudo timedatectl set-ntp true
 sudo hwclock --systohc
 # Fixed Reflector list for speed
-sudo reflector --country Taiwan,Singapore,"South Korea" --age 6 --sort rate --save /etc/pacman.d/mirrorlist
+sudo reflector --country Taiwan,Singapore,"South Korea",thailand,vietnam,"Hong Kong" --age 6 --sort rate --save /etc/pacman.d/mirrorlist
 
 # 2. Firewall Setup
 sudo firewall-cmd --add-port=1025-65535/tcp --permanent
@@ -36,23 +36,40 @@ sudo pacman -S --noconfirm papirus-icon-theme archlinux-wallpaper \
     noto-fonts-emoji noto-fonts-extra ttf-fira-code ttf-jetbrains-mono
 
 # 7. AUR Packages
-yay -S --noconfirm jmtpfs intellij-idea-ultimate-edition visual-studio-code-bin \
-    insomnia-bin ttf-ms-fonts ttf-meslo-nerd-font-powerlevel10k
+yay -S --noconfirm jmtpfs ttf-ms-fonts ttf-meslo-nerd-font-powerlevel10k
 
 # 8. Run P10K setup
 ./p10k.sh
 
-# 9. Configure Konsole Font
-KONSOLE_PROFILE="$HOME/.local/share/konsole/Shell.profile"
-mkdir -p "$HOME/.local/share/konsole"
-if [ ! -f "$KONSOLE_PROFILE" ]; then
-    echo -e "[Appearance]\nFont=MesloLGS NF,12,-1,5,50,0,0,0,0,0" > "$KONSOLE_PROFILE"
+# 1. Define paths
+KONSOLE_DIR="$HOME/.local/share/konsole"
+NEW_PROFILE="$KONSOLE_DIR/Arch.profile"
+KONSOLE_RC="$HOME/.config/konsolerc"
+
+# 2. Create the directory
+mkdir -p "$KONSOLE_DIR"
+
+# 3. Create the NEW profile (Arch.profile)
+# This bypasses the read-only default profile entirely.
+cat <<EOF > "$NEW_PROFILE"
+[General]
+Name=Arch
+Parent=FALLBACK/
+
+[Appearance]
+Font=MesloLGS NF,12,-1,5,50,0,0,0,0,0
+ColorScheme=BreezeDark
+EOF
+
+# 4. Force Konsole to use 'Arch.profile' as the Default
+# We edit the global konsolerc file to point to our new creation.
+mkdir -p "$HOME/.config"
+if [ ! -f "$KONSOLE_RC" ]; then
+    echo -e "[Desktop Entry]\nDefaultProfile=Arch.profile" > "$KONSOLE_RC"
 else
-    if grep -q "^Font=" "$KONSOLE_PROFILE"; then
-        sed -i "s/^Font=.*/Font=MesloLGS NF,12,-1,5,50,0,0,0,0,0/" "$KONSOLE_PROFILE"
-    else
-        echo "Font=MesloLGS NF,12,-1,5,50,0,0,0,0,0" >> "$KONSOLE_PROFILE"
-    fi
+    # Remove any existing DefaultProfile lines and add the correct one
+    sed -i '/DefaultProfile=/d' "$KONSOLE_RC"
+    echo -e "[Desktop Entry]\nDefaultProfile=Arch.profile" >> "$KONSOLE_RC"
 fi
 
 # 10. Permissions, Shell, and Services
