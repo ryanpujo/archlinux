@@ -16,8 +16,11 @@ sudo firewall-cmd --add-port=1025-65535/udp --permanent
 sudo firewall-cmd --reload
 
 # 3. External Scripts (yay and p10k)
-chmod +x yay.sh p10k.sh
+chmod +x yay.sh p10k.sh hw-det.sh
 ./yay.sh  # Installed to $HOME/yay-bin
+
+
+./hw-det.sh
 
 # 4. Core Graphics & Apps (Consolidated for faster download)
 sudo pacman -Syu --noconfirm xorg xorg-xinit plasma konsole sddm \
