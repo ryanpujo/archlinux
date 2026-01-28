@@ -20,12 +20,12 @@ if [ "$VIRT" != "none" ]; then
         kvm|qemu)
             echo "Installing QEMU/KVM Guest Tools..."
              pacman -S --noconfirm qemu-guest-agent spice-vdagent xf86-video-qxl mesa
-             systemctl enable --now qemu-guest-agent
+             systemctl enable qemu-guest-agent
             ;;
         oracle|virtualbox)
             echo "Installing VirtualBox Guest Tools..."
              pacman -S --noconfirm virtualbox-guest-utils
-             systemctl enable --now vboxservice
+             systemctl enable vboxservice
             ;;
         *)
             echo "Generic VM detected, installing standard Mesa drivers..."
