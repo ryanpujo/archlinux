@@ -31,7 +31,7 @@ firewall-cmd --permanent --add-port=1025-65535/udp
 firewall-cmd --reload
 
 # --- 3. Graphics, Desktop & Core Apps ---
-pacman -S --noconfirm xorg xorg-xinit kio-extras kio-fuse plasma-desktop konsole sddm \
+pacman -S --noconfirm xorg xorg-xinit kio-extras kio-fuse plasma-desktop ffmpegthumbs dolphin-plugins konsole sddm \
     firefox vlc docker docker-compose jdk21-openjdk go \
     ark kwrite p7zip unrar xz libreoffice-still dolphin kio
 
