@@ -20,7 +20,7 @@ EOF
 sed -i 's/^#ParallelDownloads = 5/ParallelDownloads = 10/' /etc/pacman.conf
 sed -i '/\[multilib\]/,/Include/s/^#//' /etc/pacman.conf
 
-reflector --country Taiwan --age 6 --sort rate --save /etc/pacman.d/mirrorlist
+reflector --country Taiwan,Japan --age 6 --sort rate --save /etc/pacman.d/mirrorlist
 
 # --- 3. Base Package Install ---
 echo "Installing base system packages..."
