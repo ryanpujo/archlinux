@@ -1,12 +1,19 @@
 #!/bin/bash
 
 # --- 0. Identify the User ---
-# Since this runs in chroot as root, we find the human user created in user.sh
-TARGET_USER=$(bin/ls/home | grep -v "lost+found" | head -n 1)
+# We look for the user with UID 1000 (the first human user created)
+TARGET_USER=$(awk -F: '$3 == 1000 {print $1}' /etc/passwd)
 USER_HOME="/home/$TARGET_USER"
 
+# Fallback: If UID 1000 isn't found, try grabbing the first folder in /home
 if [ -z "$TARGET_USER" ]; then
-    echo "Error: No user found in /home. Run user.sh first!"
+    TARGET_USER=$(ls /home | grep -v "lost+found" | head -n 1)
+    USER_HOME="/home/$TARGET_USER"
+fi
+
+if [ -z "$TARGET_USER" ]; then
+    echo "Error: No human user (UID 1000) or home directory found!"
+    echo "Check if user.sh actually succeeded."
     exit 1
 fi
 
