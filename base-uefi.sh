@@ -32,7 +32,7 @@ pacman -S --noconfirm grub grub-btrfs efibootmgr cmake ninja clang \
     pipewire-pulse pipewire-jack bash-completion openssh rsync reflector acpi acpi_call \
     power-profiles-daemon virt-manager qemu-desktop edk2-ovmf iproute2 dnsmasq \
     vde2 openbsd-netcat ipset firewalld flatpak sof-firmware nss-mdns \
-    acpid os-prober ntfs-3g terminus-font zsh sudo git
+    acpid os-prober ntfs-3g terminus-font zsh sudo
 
 # --- 4. Create User (Critical: Must happen before KDE/AUR) ---
 # This script will prompt for username and passwords
