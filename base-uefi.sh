@@ -26,18 +26,28 @@ reflector --country Taiwan --age 6 --sort rate --save /etc/pacman.d/mirrorlist
 echo "Installing base system packages..."
 pacman -Syu --noconfirm
 pacman -S --noconfirm grub grub-btrfs efibootmgr cmake ninja clang \
-networkmanager network-manager-applet dialog wpa_supplicant mtools dosfstools \
-base-devel linux-headers avahi xdg-user-dirs xdg-utils gvfs gvfs-smb nfs-utils \
-inetutils dnsutils bluez bluez-utils cups hplip alsa-utils pipewire pipewire-alsa \
-pipewire-pulse pipewire-jack bash-completion openssh rsync reflector acpi acpi_call \
-power-profiles-daemon virt-manager qemu-desktop edk2-ovmf bridge-utils dnsmasq \
-vde2 openbsd-netcat iptables-nft ipset firewalld flatpak sof-firmware nss-mdns \
-acpid os-prober ntfs-3g terminus-font zsh sudo git
+    networkmanager network-manager-applet dialog wpa_supplicant mtools dosfstools \
+    base-devel linux-headers avahi xdg-user-dirs xdg-utils gvfs gvfs-smb nfs-utils \
+    inetutils dnsutils bluez bluez-utils cups hplip alsa-utils pipewire pipewire-alsa \
+    pipewire-pulse pipewire-jack bash-completion openssh rsync reflector acpi acpi_call \
+    power-profiles-daemon virt-manager qemu-desktop edk2-ovmf iproute2 dnsmasq \
+    vde2 openbsd-netcat ipset firewalld flatpak sof-firmware nss-mdns \
+    acpid os-prober ntfs-3g terminus-font zsh sudo git
 
 # --- 4. Create User (Critical: Must happen before KDE/AUR) ---
 # This script will prompt for username and passwords
 chmod +x user.sh
 bash ./user.sh
+
+# --- 0. Identify the User ---
+# Since this runs in chroot as root, we find the human user created in user.sh
+TARGET_USER=$(bin/ls /home | grep -v "lost+found" | head -n 1)
+USER_HOME="/home/$TARGET_USER"
+
+if [ -z "$TARGET_USER" ]; then
+    echo "Error: No user found in /home. Run user.sh first!"
+    exit 1
+fi
 
 # --- 5. Hardware & Desktop Environment ---
 # These scripts use the user created above for AUR/Driver tasks

@@ -4,10 +4,10 @@
 echo "Detecting CPU for microcode..."
 if grep -q "GenuineIntel" /proc/cpuinfo; then
     echo "Intel CPU detected."
-    sudo pacman -S --noconfirm intel-ucode
+     pacman -S --noconfirm intel-ucode
 elif grep -q "AuthenticAMD" /proc/cpuinfo; then
     echo "AMD CPU detected."
-    sudo pacman -S --noconfirm amd-ucode
+     pacman -S --noconfirm amd-ucode
 fi
 
 # --- 2. Virtualization Detection ---
@@ -19,17 +19,17 @@ if [ "$VIRT" != "none" ]; then
     case "$VIRT" in
         kvm|qemu)
             echo "Installing QEMU/KVM Guest Tools..."
-            sudo pacman -S --noconfirm qemu-guest-agent spice-vdagent xf86-video-qxl mesa
-            sudo systemctl enable --now qemu-guest-agent
+             pacman -S --noconfirm qemu-guest-agent spice-vdagent xf86-video-qxl mesa
+             systemctl enable --now qemu-guest-agent
             ;;
         oracle|virtualbox)
             echo "Installing VirtualBox Guest Tools..."
-            sudo pacman -S --noconfirm virtualbox-guest-utils
-            sudo systemctl enable --now vboxservice
+             pacman -S --noconfirm virtualbox-guest-utils
+             systemctl enable --now vboxservice
             ;;
         *)
             echo "Generic VM detected, installing standard Mesa drivers..."
-            sudo pacman -S --noconfirm mesa
+             pacman -S --noconfirm mesa
             ;;
     esac
 else
@@ -41,13 +41,13 @@ else
         echo "NVIDIA GPU detected."
         # Note: nvidia-open is for Turing (RTX 20xx) or newer.
         # Use 'nvidia' for older cards.
-        sudo pacman -S --noconfirm nvidia-open nvidia-utils lib32-nvidia-utils nvidia-settings
+         pacman -S --noconfirm nvidia-open nvidia-utils lib32-nvidia-utils nvidia-settings
     elif echo "$GPU_TYPE" | grep -q "amd"; then
         echo "AMD GPU detected."
-        sudo pacman -S --noconfirm xf86-video-amdgpu mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon
+         pacman -S --noconfirm xf86-video-amdgpu mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon
     elif echo "$GPU_TYPE" | grep -q "intel"; then
         echo "Intel GPU detected."
-        sudo pacman -S --noconfirm mesa lib32-mesa vulkan-intel lib32-vulkan-intel
+         pacman -S --noconfirm mesa lib32-mesa vulkan-intel lib32-vulkan-intel
     fi
 fi
 
