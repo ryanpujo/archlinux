@@ -14,7 +14,7 @@ echo "Installing KDE for user: $TARGET_USER"
 
 # --- 1. System Clock & Mirrors ---
 # In chroot, we use the binaries directly without sudo
-reflector --country Indonesia,Singapore,Taiwan --age 6 --sort rate --save /etc/pacman.d/mirrorlist
+# reflector --country Indonesia,Singapore,Taiwan --age 6 --sort rate --save /etc/pacman.d/mirrorlist
 
 # --- 2. Firewall Setup ---
 # Pre-configure firewall for KDE Connect and local networking
@@ -24,9 +24,9 @@ firewall-cmd --permanent --add-port=1025-65535/udp
 firewall-cmd --reload
 
 # --- 3. Graphics, Desktop & Core Apps ---
-pacman -S --noconfirm xorg xorg-xinit plasma-desktop konsole sddm \
+pacman -S --noconfirm xorg xorg-xinit kio-extras kio-fuse plasma-desktop konsole sddm \
     firefox vlc docker docker-compose jdk21-openjdk go \
-    ark kwrite p7zip unrar xz libreoffice-still dolphin
+    ark kwrite p7zip unrar xz libreoffice-still dolphin kio
 
 # --- 4. Wine & Gaming (Multilib) ---
 pacman -S --noconfirm wine steam lutris gamemode innoextract \
@@ -51,7 +51,7 @@ sudo -u "$TARGET_USER" -H bash ./yay.sh
 
 # --- 7. AUR Packages ---
 echo "Installing AUR packages as $TARGET_USER..."
-sudo -u "$TARGET_USER" -H yay -S --noconfirm jmtpfs ttf-ms-fonts ttf-meslo-nerd-font-powerlevel10k
+sudo -u "$TARGET_USER" -H yay -S --noconfirm ttf-ms-fonts ttf-meslo-nerd-font-powerlevel10k
 
 # --- 8. Run P10K setup ---
 sudo -u "$TARGET_USER" -H bash ./p10k.sh
