@@ -2,7 +2,7 @@
 
 # --- 0. Identify the User ---
 # Since this runs in chroot as root, we find the human user created in user.sh
-TARGET_USER=$(bin/ls /home | grep -v "lost+found" | head -n 1)
+TARGET_USER=$(bin/ls/home | grep -v "lost+found" | head -n 1)
 USER_HOME="/home/$TARGET_USER"
 
 if [ -z "$TARGET_USER" ]; then
