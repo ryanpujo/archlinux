@@ -1,28 +1,30 @@
+#!/bin/bash
+
 # 1. Safety Check: Ensure the script is NOT run as root
 if [[ $EUID -eq 0 ]]; then
-   echo "Error: Do not run this script as root/sudo. It will ask for your password when needed."
+   echo "Error: yay cannot be built as root. Please run as a normal user."
    exit 1
 fi
 
-# 2. Check and Install yay in the user's home directory
+# 2. Check and Install yay
 if ! command -v yay &> /dev/null; then
-    echo "Installing yay-bin in $HOME/yay-bin..."
+    echo "Building yay-bin..."
 
-    # Move to home directory to ensure a clean build environment
-    cd "$HOME" || exit
+    # Use /tmp for building to keep the home directory clean
+    BUILD_DIR=$(mktemp -d)
+    git clone https://aur.archlinux.org/yay-bin.git "$BUILD_DIR"
 
-    # Clone the repository
-    git clone https://aur.archlinux.org/yay-bin.git
+    cd "$BUILD_DIR" || exit
 
-    # Enter the folder
-    cd yay-bin || exit
-
-    # Build and install (this will prompt for your sudo password)
+    # Build and install
+    # --needed prevents re-installing base-devel dependencies
     makepkg -si --noconfirm
 
-    # Clean up: Go back home and remove the build folder
-    cd "$HOME" || exit
-    rm -rf "$HOME/yay-bin"
+    # Clean up
+    cd ~ || exit
+    rm -rf "$BUILD_DIR"
 
     echo "yay-bin installed successfully."
+else
+    echo "yay is already installed. Skipping..."
 fi

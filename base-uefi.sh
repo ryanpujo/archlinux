@@ -1,55 +1,58 @@
 #!/bin/bash
 
+# 1. Localization & Clock
 ln -sf /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 hwclock --systohc
-sed -i '171s/.//' /etc/locale.gen
+sed -i '/^#en_US.UTF-8 UTF-8/s/^#//' /etc/locale.gen
 locale-gen
-echo "LANG=en_US.UTF-8" >> /etc/locale.conf
-echo "archlinux" >> /etc/hostname
-echo "127.0.0.1 localhost" >> /etc/hosts
-echo "::1       localhost" >> /etc/hosts
-echo "127.0.1.1 arch.localdomain arch" >> /etc/hosts
-echo root:password | chpasswd
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+echo "archlinux" > /etc/hostname
 
-# You can add xorg to the installation packages, I usually add it at the DE or WM install script
-# You can remove the tlp package if you are installing on a desktop or vm
+cat <<EOF > /etc/hosts
+127.0.0.1   localhost
+::1         localhost
+127.0.1.1   archlinux.localdomain archlinux
+EOF
 
-echo "ParallelDownloads = 5" >> /etc/pacman.conf
+# 2. System Tweaks
+sed -i 's/^#ParallelDownloads = 5/ParallelDownloads = 10/' /etc/pacman.conf
+sed -i '/\[multilib\]/,/Include/s/^#//' /etc/pacman.conf
 
-# uncomment these 2 lines to enable multilib repository
-echo "[multilib]" >> /etc/pacman.conf
-echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+chmod +x kde-rc1.sh user.sh
 
-pacman -Syu grub grub-btrfs efibootmgr cmake ninja clang networkmanager network-manager-applet dialog wpa_supplicant mtools dosfstools base-devel linux-headers linux-atm avahi xdg-user-dirs xdg-utils gvfs gvfs-smb nfs-utils inetutils dnsutils bluez bluez-utils cups hplip alsa-utils pipewire pipewire-alsa pipewire-pulse pipewire-jack bash-completion openssh rsync reflector acpi acpi_call power-profiles-daemon virt-manager qemu edk2-ovmf bridge-utils dnsmasq vde2 openbsd-netcat iptables-nft ipset firewalld flatpak sof-firmware nss-mdns acpid os-prober ntfs-3g terminus-font zsh
+# Fixed Reflector list for speed
+reflector --country Taiwan, "South Korea",thailand,vietnam,"Hong Kong" --age 6 --sort rate --save /etc/pacman.d/mirrorlist
 
-# pacman -S --noconfirm xf86-video-amdgpu
-pacman -S --noconfirm nvidia-open nvidia-utils nvidia-settings
+# 3. Base Package Install
+pacman -Syu --noconfirm
+pacman -S --noconfirm grub grub-btrfs efibootmgr cmake ninja clang \
+networkmanager network-manager-applet dialog wpa_supplicant mtools dosfstools \
+base-devel linux-headers avahi xdg-user-dirs xdg-utils gvfs gvfs-smb nfs-utils \
+inetutils dnsutils bluez bluez-utils cups hplip alsa-utils pipewire pipewire-alsa \
+pipewire-pulse pipewire-jack bash-completion openssh rsync reflector acpi acpi_call \
+power-profiles-daemon virt-manager qemu-desktop edk2-ovmf bridge-utils dnsmasq \
+vde2 openbsd-netcat iptables-nft ipset firewalld flatpak sof-firmware nss-mdns \
+acpid os-prober ntfs-3g terminus-font zsh sudo
 
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB #change the directory to /boot/efi is you mounted the EFI partition at /boot/efi
+./user.sh
+./kde-rc1.sh
 
+# 5. Bootloader
+# Check for EFI directory
+EFI_DIR="/boot"
+[ -d "/boot/efi" ] && EFI_DIR="/boot/efi"
+
+grub-install --target=x86_64-efi --efi-directory=$EFI_DIR --bootloader-id=GRUB
+echo "GRUB_DISABLE_OS_PROBER=false" >> /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 
-systemctl enable NetworkManager
-systemctl enable bluetooth
-systemctl enable cups.service
-systemctl enable sshd
-systemctl enable avahi-daemon
-systemctl enable power-profiles-daemon.service
-systemctl enable reflector.timer
-systemctl enable fstrim.timer
-systemctl enable libvirtd
-systemctl enable firewalld
-systemctl enable acpid
 
-useradd -m ryanpujo
-echo ryanpujo:password | chpasswd
-usermod -aG libvirt ryanpujo
+SERVICES=(NetworkManager bluetooth cups sshd avahi-daemon
+          power-profiles-daemon reflector.timer fstrim.timer
+          libvirtd firewalld acpid)
 
-echo "ryanpujo ALL=(ALL) ALL" >> /etc/sudoers.d/ryanpujo
+for service in "${SERVICES[@]}"; do
+    systemctl enable "$service"
+done
 
-
-printf "\e[1;32mDone! Type exit, umount -a and reboot.\e[0m"
-
-
-
-
+printf "\e[1;32mInstallation complete! Exit, umount -R /mnt, and reboot.\e[0m\n"
