@@ -89,6 +89,12 @@ for service in "${SERVICES[@]}"; do
     systemctl enable "$service"
 done
 
+# --- 2. Firewall Setup ---
+wait_and_print "Configuring Firewalld for KDE Connect and local networking"
+firewall-cmd --permanent --add-port=1025-65535/tcp
+firewall-cmd --permanent --add-port=1025-65535/udp
+firewall-cmd --reload
+
 # --- Final Completion ---
 printf "\n\e[1;32m--------------------------------------------------\e[0m\n"
 printf "\e[1;32m       ARCH LINUX INSTALLATION COMPLETE!          \e[0m\n"

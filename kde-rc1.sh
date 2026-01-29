@@ -23,12 +23,6 @@ fi
 
 printf "\e[1;32m[OK]\e[0m Target User: %s\n" "$TARGET_USER"
 
-# --- 2. Firewall Setup ---
-status_msg "Configuring Firewalld for KDE Connect and local networking"
-firewall-cmd --permanent --add-port=1025-65535/tcp
-firewall-cmd --permanent --add-port=1025-65535/udp
-firewall-cmd --reload
-
 # --- 3. Graphics, Desktop & Core Apps ---
 status_msg "Installing Plasma Desktop, Firefox, and Development tools"
 pacman -S --noconfirm xorg xorg-xinit kio-extras kio-fuse plasma-desktop ffmpegthumbs dolphin-plugins konsole sddm \
