@@ -100,3 +100,5 @@ printf "\n\e[1;32m--------------------------------------------------\e[0m\n"
 printf "\e[1;32m       ARCH LINUX INSTALLATION COMPLETE!          \e[0m\n"
 printf "\e[1;32m--------------------------------------------------\e[0m\n"
 printf "Next steps: type 'exit', 'umount -R /mnt', then 'reboot'.\n"
+
+p10k configure
